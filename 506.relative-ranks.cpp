@@ -11,11 +11,11 @@ public:
 		priority_queue<pair<int, int>, vector<pair<int, int>>, less<>> pq;
 		for (int i = 0; i < score.size(); i++)
 			pq.push({ score[i], i });
-		
+
 		vector<string> ans(score.size());
 		int medal = 1;
 		while (!pq.empty()) {
-			auto [s, i] = pq.top(); pq.pop();
+			auto [_, i] = pq.top(); pq.pop();
 			switch (medal) {
 				case 1 :
 					ans[i] = "Gold Medal";
