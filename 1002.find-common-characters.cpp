@@ -6,7 +6,7 @@
  */
 
 // @lc code=start
-class Solution {
+class SolutionSet {
 public:
 	vector<string> commonChars(vector<string>& words) {
 		vector<multiset<char>> dict;
@@ -22,6 +22,39 @@ public:
 				for (int j = 0; j < common[i]; j++)
 					ans.push_back(string(1, 'a' + i));
 		return ans;
+	}
+};
+
+class SolutionArray {
+public:
+	vector<string> commonChars(vector<string>& words) {
+		vector<vector<int>> freq(words.size(), vector<int>(26, 0));
+		for (int i = 0; i < words.size(); i++)
+			for (const auto& ch : words[i])
+				freq[i][ch - 'a']++;
+
+		vector<string> ans;
+		// scan by column
+		for (int alpha = 0; alpha < 26; alpha++) {
+			int min_freq = INT_MAX;
+			// check each row (word in words)
+			for (int word = 0; word < freq.size(); word++)
+				min_freq = min(min_freq, freq[word][alpha]);
+
+			for (int i = 0; i < min_freq; i++)
+				ans.push_back(string(1, 'a' + alpha));
+		}
+		return ans;
+	}
+};
+
+class Solution {
+	SolutionSet MultiSet;
+	SolutionArray Array;
+public:
+	vector<string> commonChars(vector<string>& words) {
+	//	return MultiSet.commonChars(words);
+		return Array.commonChars(words);
 	}
 };
 // @lc code=end
