@@ -28,21 +28,18 @@ public:
 class SolutionArray {
 public:
 	vector<string> commonChars(vector<string>& words) {
-		vector<vector<int>> freq(words.size(), vector<int>(26, 0));
+		vector<vector<int>> freq(26, vector<int>(words.size(), 0));
 		for (int i = 0; i < words.size(); i++)
-			for (const auto& ch : words[i])
-				freq[i][ch - 'a']++;
+			for (int j = 0; j < words[i].length(); j++)
+				freq[words[i][j] - 'a'][i]++;
 
 		vector<string> ans;
-		// scan by column
-		for (int alpha = 0; alpha < 26; alpha++) {
-			int min_freq = INT_MAX;
-			// check each row (word in words)
-			for (int word = 0; word < freq.size(); word++)
-				min_freq = min(min_freq, freq[word][alpha]);
+		for (int i = 0; i < 26; i++) {
+			int least_common = *min_element(freq[i].begin(), freq[i].end());
 
-			for (int i = 0; i < min_freq; i++)
-				ans.push_back(string(1, 'a' + alpha));
+			if (least_common)
+				for (int j = 0; j < least_common; j++)
+					ans.push_back(string(1, i + 'a'));
 		}
 		return ans;
 	}
