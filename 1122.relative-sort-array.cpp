@@ -15,14 +15,13 @@ public:
 		vector<int> ans;
 		// handle numbers in arr2
 		for (const auto& n : arr2)
-			if (freq.count(n)) {
-				ans.insert(ans.end(), freq[n], n);
-				freq.erase(n);
-			}
+			while (freq.count(n) && freq[n]--)
+				ans.push_back(n);
 
 		// handle remain numbers
 		for (const auto& [n, c] : freq)
-			ans.insert(ans.end(), c, n);
+			if (c > 0)
+				ans.insert(ans.end(), c, n);
 
 		return ans;
 	}
