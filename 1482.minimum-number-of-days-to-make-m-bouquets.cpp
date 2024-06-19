@@ -8,7 +8,7 @@
 // @lc code=start
 class Solution {
 	inline bool IsAvailable(vector<int>& bloomDay, int m, int k, int d) {
-		int curr = 0, adjs = 0, bouquets = 0;
+		int adjs = 0, bouquets = 0;
 		for (const auto& day : bloomDay) {
 			if (day <= d) {
 				adjs++;
