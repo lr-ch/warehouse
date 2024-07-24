@@ -9,13 +9,13 @@
 class Solution {
 public:
 	vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
-		vector<pair<int, string>> people;
+		vector<pair<int, int>> people;
 		for (int i = 0; i < names.size(); i++)
-			people.push_back({ heights[i], names[i] });
+			people.push_back({ heights[i], i });
 		sort(people.rbegin(), people.rend());
 
 		vector<string> ans;
-		for (const auto& [_, name] : people) ans.push_back(name);
+		for (const auto& [_, name] : people) ans.push_back(names[name]);
 		return ans;
 	}
 };
