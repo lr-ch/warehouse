@@ -18,10 +18,16 @@ public:
 			return res;
 		};
 
-		sort(nums.begin(), nums.end(), [&](const auto& a, const auto& b) {
-			return conv(a) < conv(b);
-		});
-		return nums;
+		vector<pair<int, int>> converted(nums.size());
+		for (int i = 0; i < nums.size(); i++)
+			converted[i] = { conv(nums[i]), i };
+
+		sort(converted.begin(), converted.end());
+
+		vector<int> ans(nums.size());
+		for (int i = 0; i < nums.size(); i++)
+			ans[i] = nums[converted[i].second];
+		return ans;
 	}
 };
 // @lc code=end
