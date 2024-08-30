@@ -6,10 +6,12 @@
 
 // @lc code=start
 class Solution {
-	unordered_map<int, unordered_map<int, int>> graph;
-	unordered_map<int, unordered_map<int, bool>> modified;
+	static constexpr int NotANumber = 1e9 + 7;
 public:
 	vector<vector<int>> modifiedGraphEdges(int n, vector<vector<int>>& edges, int source, int destination, int target) {
+		vector<vector<int>> graph(101, vector<int>(101, NotANumber));
+		vector<vector<bool>> modified(101, vector<bool>(101, false));
+
 		// generate graph
 		for (const auto& e : edges) {
 			int a = e[0], b = e[1], w = e[2];
@@ -23,37 +25,42 @@ public:
 		}
 
 		// calculate shortest path from destination to each nodes
-		unordered_map<int, int> distFromDest;
+		vector<int> distFromDest(101, NotANumber);
 		priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
 		pq.push({ 0, destination });
 		while (!pq.empty()) {
 			auto [dist, curr] = pq.top(); pq.pop();
-			if (distFromDest.count(curr)) continue;		// already visited
+			if (distFromDest[curr] != NotANumber) continue;		// already visited
 
 			distFromDest[curr] = dist;
-			for (const auto& [next, w] : graph[curr])
-				pq.push({ dist + w, next });
+			for (int next = 0; next < 101; next++) {
+				int w = graph[curr][next];
+				if (w != NotANumber) pq.push({ dist + w, next });
+			}
 		}
 
 		// calculate shortest path from source to each nodes
-		unordered_map<int, int> distFromSource;
+		vector<int> distFromSource(101, NotANumber);
 		pq.push({ 0, source });
 		while (!pq.empty()) {
 			auto [dist, curr] = pq.top(); pq.pop();
-			if (distFromSource.count(curr)) continue;	// already visited
+			if (distFromSource[curr] != NotANumber) continue;		// already visited
 
 			distFromSource[curr] = dist;
 
 			// if the shortest path to destination is not the target
 			if (curr == destination && dist != target) return {};
 
-			for (auto [next, w] : graph[curr]) {
+			for (int next = 0; next < 101; next++) {
+				int w = graph[curr][next];
+				if (w == NotANumber) continue;
+
 				/*
-				 *   source -> ... -> curr -?-> next ... -> destination
-				 *
-				 *   Q : if "?" is modifiable, what value will it be?
-				 *   A : target - (distance between source to curr + distance between next to destination)
-				 */
+				*   source -> ... -> curr -?-> next ... -> destination
+				*
+				*   Q : if "?" is modifiable, what value will it be?
+				*   A : target - (distance between source to curr + distance between next to destination)
+				*/
 				if (modified[curr][next] && distFromSource[curr] + w + distFromDest[next] < target) {
 					w = target - (distFromSource[curr] + distFromDest[next]);
 					graph[curr][next] = w;
