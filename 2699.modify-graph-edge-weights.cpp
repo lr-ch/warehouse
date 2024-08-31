@@ -6,11 +6,11 @@
 
 // @lc code=start
 class Solution {
-	static constexpr int NotANumber = 1e9 + 7;
+	static constexpr int UNCONNECTED = 1e9 + 7;
 public:
 	vector<vector<int>> modifiedGraphEdges(int n, vector<vector<int>>& edges, int source, int destination, int target) {
-		vector<vector<int>> graph(101, vector<int>(101, NotANumber));
-		vector<vector<bool>> modified(101, vector<bool>(101, false));
+		vector<vector<int>> graph(n, vector<int>(n, UNCONNECTED));
+		vector<vector<bool>> modified(n, vector<bool>(n, false));
 
 		// generate graph
 		for (const auto& e : edges) {
@@ -25,35 +25,35 @@ public:
 		}
 
 		// calculate shortest path from destination to each nodes
-		vector<int> distFromDest(101, NotANumber);
+		vector<int> distFromDest(n, UNCONNECTED);
 		priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
 		pq.push({ 0, destination });
 		while (!pq.empty()) {
 			auto [dist, curr] = pq.top(); pq.pop();
-			if (distFromDest[curr] != NotANumber) continue;		// already visited
+			if (distFromDest[curr] != UNCONNECTED) continue;		// already visited
 
 			distFromDest[curr] = dist;
-			for (int next = 0; next < 101; next++) {
+			for (int next = 0; next < n; next++) {
 				int w = graph[curr][next];
-				if (w != NotANumber) pq.push({ dist + w, next });
+				if (w != UNCONNECTED) pq.push({ dist + w, next });
 			}
 		}
 
 		// calculate shortest path from source to each nodes
-		vector<int> distFromSource(101, NotANumber);
+		vector<int> distFromSource(n, UNCONNECTED);
 		pq.push({ 0, source });
 		while (!pq.empty()) {
 			auto [dist, curr] = pq.top(); pq.pop();
-			if (distFromSource[curr] != NotANumber) continue;		// already visited
+			if (distFromSource[curr] != UNCONNECTED) continue;		// already visited
 
 			distFromSource[curr] = dist;
 
 			// if the shortest path to destination is not the target
 			if (curr == destination && dist != target) return {};
 
-			for (int next = 0; next < 101; next++) {
+			for (int next = 0; next < n; next++) {
 				int w = graph[curr][next];
-				if (w == NotANumber) continue;
+				if (w == UNCONNECTED) continue;
 
 				/*
 				*   source -> ... -> curr -?-> next ... -> destination
