@@ -8,7 +8,7 @@
 class Solution {
 public:
 	int chalkReplacer(vector<int>& chalk, int k) {
-		vector<unsigned long long> preSum(chalk.size());
+		vector<unsigned long> preSum(chalk.size());
 		preSum[0] = chalk[0];
 		for (int i = 1; i < chalk.size(); i++)
 			preSum[i] = preSum[i- 1] + chalk[i];
