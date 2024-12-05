@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
 public:
-	bool canChange(string start, string target) {
+	bool canChange(string_view start, string_view target) {
 		int si = 0, ti = 0;
 		while (si <= start.length() && ti <= target.length()) {
 			// skip all '_'
