@@ -25,8 +25,9 @@ public:
 		while (!pq.empty()) {
 			auto [ch, f] = pq.top(); pq.pop();
 
+			ans += string(min(f, repeatLimit), ch);
+
 			if (f > repeatLimit) {
-				ans += string(repeatLimit, ch);
 				f -= repeatLimit;
 
 				// to avoid use the same 'ch' in next round,
@@ -44,8 +45,7 @@ public:
 					// also put it back
 					pq.push({ ch, f });
 				}
-			} else
-				ans += string(f, ch);
+			}
 		}
 		return ans;
 	}
