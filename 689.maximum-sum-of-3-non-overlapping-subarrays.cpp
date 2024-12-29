@@ -22,10 +22,9 @@ public:
 		 *        we tabulate from index of [k] and [nums.size() - k]
 		 */
 		vector<int> leftMax(nums.size()), rightMax(nums.size());
-
+		int maxSum = INT_MIN;
 		// tabulate the best start index from left most subarray
-		int maxSum = preSum[k] - preSum[0];
-		for (int i = k; i < nums.size(); i++) {
+		for (int i = k - 1; i < nums.size(); i++) {
 			int currSum = preSum[i + 1] - preSum[i - k + 1];
 			if (currSum > maxSum) {
 				maxSum = currSum;
@@ -35,9 +34,8 @@ public:
 		}
 
 		// tabulate the best start index from right most subarray
-		rightMax[nums.size() - k] = nums.size() - k;
-		maxSum = preSum[nums.size()] - preSum[nums.size() - k];
-		for (int i = nums.size() - k - 1; i >= 0; i--) {
+		maxSum = INT_MIN;
+		for (int i = nums.size() - k; i >= 0; i--) {
 			int currSum = preSum[i + k] - preSum[i];
 			if (currSum >= maxSum) {	// to keep index as lower as possible,
 										// case of '=' should be in consideration
